@@ -3,11 +3,15 @@ name: Publish
 # Attaches one zip per font set to a release when it is published, so templates
 # and CI download fonts from release assets: those do not count against the Git
 # LFS bandwidth quota that fetching the LFS files would use. A manual run
-# re-attaches the zips to the release named by the tag it is run on.
+# re-attaches the zips to the release of the tag it names.
 on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to re-attach the zips to, e.g. v1.0.0
+        required: true
 
 permissions: {}
 
@@ -17,11 +21,12 @@ jobs:
     permissions:
       contents: write
     env:
-      TAG: ${{ github.event.release.tag_name || github.ref_name }}
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
     steps:
-      - name: Checkout with LFS files
+      - name: Checkout the tag with LFS files
         uses: actions/checkout@v7
         with:
+          ref: ${{ env.TAG }}
           lfs: true
 
       - name: Package each font set
