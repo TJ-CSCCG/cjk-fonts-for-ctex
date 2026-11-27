@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/compare/v1.0.0...v1.0.1) (2026-11-27)
+
+
+### 文档与维护 | Docs & Maintenance
+
+* let a manual Publish run name the release tag ([#5](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/issues/5)) ([fc30e59](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/commit/fc30e59f8c40d6cd01451d618f460b52dba323fa))
+* split releasing into Release PR and Publish ([#3](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/issues/3)) ([943c6c9](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/commit/943c6c966a86a584d311d2b14bf8b72c5bf43077))
+
 ## 1.0.0 (2026-11-27)
 
 
