@@ -1,39 +1,50 @@
 # CJK Fonts for ctex
 
-CJK font files referenced by [ctex](https://github.com/CTeX-org/ctex-kit) fontset definitions. Organized by `fontset` value for use with `\documentclass[fontset=...]{ctexbook}` or [TongjiThesis](https://github.com/TJ-CSCCG/TongjiThesis).
+CJK font files for the ctex `fontset` values `adobe`, `fandol`, `founder` and `windows`, one directory per set, for [TongjiThesis](https://github.com/TJ-CSCCG/TongjiThesis) and other documents built on [ctex](https://github.com/CTeX-org/ctex-kit).
 
-## Fontsets
+## Font sets
 
-| Directory  | `fontset=` | Fonts                                                                 | Source                         |
-| ---------- | ---------- | --------------------------------------------------------------------- | ------------------------------ |
-| `adobe/`   | `adobe`    | Adobe Song / Heiti / Kaiti / Fangsong Std                             | Bundled with Adobe products    |
-| `fandol/`  | `fandol`   | Fandol Song / Hei / Fang / Kai                                        | TeX Live (SIL OFL)             |
-| `founder/` | `founder`  | Founder 书宋 / 黑体 / 楷体 / 仿宋 / 隶书 / 幼圆 / 小标宋 / 细黑一     | Bundled with WPS Office        |
-| `windows/` | `windows`  | SimSun / SimHei / SimKai / SimFang / SimLi / SimYou / Microsoft YaHei | Bundled with Microsoft Windows |
+| Directory and `fontset=` | Files | Source | Licence |
+| --- | --- | --- | --- |
+| `adobe` | `AdobeSongStd-Light.otf`, `AdobeHeitiStd-Regular.otf`, `AdobeKaitiStd-Regular.otf`, `AdobeFangsongStd-Regular.otf` | Bundled with Adobe Reader | Proprietary (Adobe) |
+| `fandol` | `FandolSong-Regular.otf`, `FandolSong-Bold.otf`, `FandolHei-Regular.otf`, `FandolHei-Bold.otf`, `FandolKai-Regular.otf`, `FandolFang-Regular.otf` | Fandol team, [CTAN](https://ctan.org/pkg/fandol) (marked obsolete in November 2026) | GPL-3.0 with the font exception |
+| `founder` | `FZSSK.TTF` 方正书宋, `FZHTK.TTF` 方正黑体, `FZKTK.TTF` 方正楷体, `FZFSK.TTF` 方正仿宋, `FZXBSK.TTF` 方正小标宋, `FZLSK.TTF` 方正隶书, `FZXH1K.TTF` 方正细黑一, `FZY1K.TTF` 方正细圆, `FZY3K.TTF` 方正准圆 | Bundled with WPS Office | Proprietary (Founder); 书宋, 黑体, 楷体 and 仿宋 are free for publishing use ([Founder](https://www.foundertype.com/index.php/About/powerbus.html)) |
+| `windows` | `simsun.ttc` 宋体, `simhei.ttf` 黑体, `simkai.ttf` 楷体, `simfang.ttf` 仿宋, `simli.ttf` 隶书, `simyou.ttf` 幼圆, `msyh.ttc` and `msyhbd.ttc` 微软雅黑 | Bundled with Microsoft Windows | Proprietary (Zhongyi Electronic, Microsoft) |
+
+## Download
+
+Each [release](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases) carries one zip per set. The latest is always at:
+
+```text
+https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest/download/<set>.zip
+```
+
+where `<set>` is `adobe`, `fandol`, `founder` or `windows`. Download from releases rather than from the repository files: the files are stored with Git LFS, whose bandwidth is limited, while release downloads are not.
 
 ## Usage
 
-```latex
-% Pick one of the fontsets provided in this repository:
-\documentclass[fontset=fandol]{ctexbook}   % cross-platform, ships with TeX Live
-\documentclass[fontset=windows]{ctexbook}  % requires SimSun/SimHei/…
-\documentclass[fontset=adobe]{ctexbook}    % requires Adobe CJK fonts
-\documentclass[fontset=founder]{ctexbook}  % requires Founder fonts
-```
+- **TongjiThesis:** run `make fonts` (Windows: `.\make.bat fonts`) to download the `windows` set into the project's `fonts/` folder, where the class finds it. On Overleaf, upload the files from the zip into a `fonts/` folder in the project. See the TongjiThesis README for the other sets.
+- **Other ctex documents:** install the fonts in your system font directory, refresh the font cache (`fc-cache -fv` on Linux), then compile with the matching `fontset=`:
 
-Install fonts to your system font directory, refresh the font cache (`fc-cache -fv` on Linux/macOS), then compile as usual.
+  ```latex
+  \documentclass[fontset=windows]{ctexbook}
+  ```
+
+## Releases
+
+Releases are cut by [release-please](https://github.com/googleapis/release-please) from Conventional Commits on `main`: merging its release pull request creates the tag and the release, and the workflow attaches the zips.
 
 ## Disclaimer
 
-This repository provides font files **for educational and academic reference only**. The fonts are NOT authored or owned by this project:
+This repository provides font files **for educational and academic reference only**. The fonts are not authored or owned by this project:
 
-- **Fandol** fonts are released under the [SIL Open Font License 1.1](https://openfontlicense.org/) and are freely redistributable.
-- **Adobe**, **Microsoft (SimSun/SimHei/…),** and **Founder (方正)** fonts are proprietary typefaces owned by their respective copyright holders. These files are provided solely to assist students in typesetting academic theses with the correct typefaces required by their institutions. They are NOT licensed for commercial use, redistribution, or embedding in published works without proper authorization from the copyright holders.
+- **Fandol** fonts are licensed under the GPL-3.0 with the font exception, and may be redistributed under its terms.
+- **Adobe**, **Microsoft (SimSun, SimHei and the others)** and **Founder (方正)** fonts are proprietary typefaces owned by their copyright holders. They are provided only to help students typeset theses in the typefaces their institutions require. They are not licensed for commercial use, redistribution, or embedding in published works without authorization from the copyright holders.
 
-Users are responsible for ensuring compliance with applicable font licenses in their jurisdiction.
+Users are responsible for complying with the font licences that apply to them.
 
-## See Also
+## See also
 
-- [ctex-kit](https://github.com/CTeX-org/ctex-kit) — ctex macro package
-- [TongjiThesis](https://github.com/TJ-CSCCG/TongjiThesis) — Tongji University undergraduate thesis template
-- [notofonts/noto-cjk](https://github.com/notofonts/noto-cjk) — Noto CJK (free, full Unicode coverage)
+- [ctex-kit](https://github.com/CTeX-org/ctex-kit): the ctex macro package
+- [TongjiThesis](https://github.com/TJ-CSCCG/TongjiThesis): the Tongji University undergraduate thesis template
+- [notofonts/noto-cjk](https://github.com/notofonts/noto-cjk): Noto CJK, free, full Unicode coverage
