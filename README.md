@@ -32,7 +32,7 @@ where `<set>` is `adobe`, `fandol`, `founder` or `windows`. Download from releas
 
 ## Releases
 
-Releases are cut by [release-please](https://github.com/googleapis/release-please) from Conventional Commits on `main`: merging its release pull request creates the tag and the release, and the workflow attaches the zips.
+Releases are cut by [release-please](https://github.com/googleapis/release-please) from Conventional Commits on `main` (workflow Release PR): merging its release pull request creates the tag and the release, and the Publish workflow attaches the zips.
 
 ## Disclaimer
 

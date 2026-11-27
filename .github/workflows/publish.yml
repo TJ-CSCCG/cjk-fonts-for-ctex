@@ -1,0 +1,44 @@
+name: Publish
+
+# Attaches one zip per font set to a release when it is published, so templates
+# and CI download fonts from release assets: those do not count against the Git
+# LFS bandwidth quota that fetching the LFS files would use. A manual run
+# re-attaches the zips to the release named by the tag it is run on.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.release.tag_name || github.ref_name }}
+    steps:
+      - name: Checkout with LFS files
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Package each font set
+        run: |
+          mkdir dist
+          for set in adobe fandol founder windows; do
+            # A file under 10 KB here is an LFS pointer, not a font: fail rather than ship it.
+            small=$(find "$set" -type f -size -10k)
+            if [ -n "$small" ]; then
+              echo "::error::LFS pointers instead of fonts in $set: $small"
+              exit 1
+            fi
+            (cd "$set" && zip -q -X "../dist/$set.zip" ./*)
+          done
+          ls -l dist
+
+      - name: Attach the font sets to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$TAG" dist/*.zip --clobber

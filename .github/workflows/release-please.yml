@@ -1,13 +1,11 @@
-name: release-please
+name: Release PR
 
 # Maintains a release PR from Conventional Commits on main (version.txt and
-# CHANGELOG.md). Merging it creates the tag and the GitHub release, and the
-# job then attaches one zip per font set, so templates and CI download fonts
-# from release assets: those do not count against the Git LFS bandwidth quota
-# that fetching the LFS files would use.
+# CHANGELOG.md). Merging it creates the tag and the GitHub release, which
+# starts publish.yml to attach the font zips.
 #
-# Auth: the org's GitHub App token (secrets APP_ID and APP_PRIVATE_KEY), as in
-# TJ-CSCCG/TongjiThesis, so the release it creates can trigger other workflows.
+# Auth: the org's GitHub App token (secrets APP_ID and APP_PRIVATE_KEY), so the
+# release it creates can trigger publish.yml.
 
 on:
   push:
@@ -31,37 +29,8 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Run release-please
-        id: release
         uses: googleapis/release-please-action@v5
         with:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-      - name: Checkout with LFS files
-        if: steps.release.outputs.release_created
-        uses: actions/checkout@v7
-        with:
-          lfs: true
-
-      - name: Package each font set
-        if: steps.release.outputs.release_created
-        run: |
-          mkdir dist
-          for set in adobe fandol founder windows; do
-            # A file under 10 KB here is an LFS pointer, not a font: fail rather than ship it.
-            small=$(find "$set" -type f -size -10k)
-            if [ -n "$small" ]; then
-              echo "::error::LFS pointers instead of fonts in $set: $small"
-              exit 1
-            fi
-            (cd "$set" && zip -q -X "../dist/$set.zip" ./*)
-          done
-          ls -l dist
-
-      - name: Attach the font sets to the release
-        if: steps.release.outputs.release_created
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          TAG: ${{ steps.release.outputs.tag_name }}
-        run: gh release upload "$TAG" dist/*.zip --clobber
